@@ -1,1 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+char original[26] = "abcdefghijklmnopqrstuvwxyz"; // Original alphabet
+char cipher[26] = "qwertyuioplkjhgfdsazxcvbmn"; // Cipher alphabet
+int n;
+// Encrypting part
+printf("Enter the length of string to be encrypted: ");
+scanf("%d", &n);
+char input[n + 1]; // Input string
+printf("Enter the string to encrypt: ");
+scanf("%s", input);
+char encrypt[30]; // Encrypted string
+for (int i = 0; i < n; i++)
+{
+char current = input[i];
+if (current >= 'a' && current <= 'z')
+{
+int index = current - 'a';
+encrypt[i] = cipher[index]; // Encrypt the character using the cipher
+}
+else
+{
+encrypt[i] = current; // Keep non-alphabet characters unchanged
+}
+}
+encrypt[n] = '\0'; // Null-terminate the encrypted string
+printf("Encrypted string: %s\n", encrypt);
+// Decrypting part
+char result[30];
+int no;
+printf("Enter the length of string to be decrypted: ");
+scanf("%d", &no);
+printf("Enter the string to decrypt: ");
+scanf("%s", result);
+char decrypt[30]; // Decrypted string
+for (int i = 0; i < no; i++)
+{
+char c = result[i];
+if (c >= 'a' && c <= 'z') // Check if the character is lowercase
+{
+// Reverse the cipher: find the corresponding letter in 'cipher' and map back to
+'original'
+int j;
+for (j = 0; j < 26; j++) {
+if (cipher[j] == c) {
+break; // Found the character in the cipher string
+}
+}
+decrypt[i] = original[j]; // Map it back to the original alphabet
+}
+else
+{
+decrypt[i] = c; // Keep non-alphabet characters unchanged
+}
+}
+decrypt[no] = '\0'; // Null-terminate the decrypted string
+printf("The decrypted string: %s\n", decrypt); // Print the decrypted string
+return 0;
+}
 
