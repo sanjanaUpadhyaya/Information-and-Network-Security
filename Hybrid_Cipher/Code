@@ -1,0 +1,133 @@
+import numpy as np
+
+# Playfair Cipher 
+def generate_playfair_matrix(key):
+    key = key.upper().replace("J", "I")  # Replace J with I (standard Playfair rule)
+    matrix = []
+    seen = set()
+
+    for char in key + "ABCDEFGHIKLMNOPQRSTUVWXYZ":
+        if char not in seen:
+            seen.add(char)
+            matrix.append(char)
+
+    return np.array(matrix).reshape(5, 5)
+
+def find_position(matrix, letter):
+    row, col = np.where(matrix == letter)
+    return row[0], col[0]
+
+def playfair_encrypt(plaintext, matrix):
+    plaintext = plaintext.upper().replace("J", "I").replace(" ", "")
+    if len(plaintext) % 2 != 0:
+        plaintext += "X"  # Padding
+
+    ciphertext = ""
+    for i in range(0, len(plaintext), 2):
+        a, b = plaintext[i], plaintext[i+1]
+        row_a, col_a = find_position(matrix, a)
+        row_b, col_b = find_position(matrix, b)
+
+        # Same row
+        if row_a == row_b:
+            ciphertext += matrix[row_a, (col_a + 1) % 5] + matrix[row_b, (col_b + 1) % 5]
+        # Same column
+        elif col_a == col_b:
+            ciphertext += matrix[(row_a + 1) % 5, col_a] + matrix[(row_b + 1) % 5, col_b]
+        # Rectangle swap
+        else:
+            ciphertext += matrix[row_a, col_b] + matrix[row_b, col_a]
+
+    return ciphertext
+
+def playfair_decrypt(ciphertext, matrix):
+    plaintext = ""
+    for i in range(0, len(ciphertext), 2):
+        a, b = ciphertext[i], ciphertext[i+1]
+        row_a, col_a = find_position(matrix, a)
+        row_b, col_b = find_position(matrix, b)
+
+        # Same row
+        if row_a == row_b:
+            plaintext += matrix[row_a, (col_a - 1) % 5] + matrix[row_b, (col_b - 1) % 5]
+        # Same column
+        elif col_a == col_b:
+            plaintext += matrix[(row_a - 1) % 5, col_a] + matrix[(row_b - 1) % 5, col_b]
+        # Rectangle swap
+        else:
+            plaintext += matrix[row_a, col_b] + matrix[row_b, col_a]
+
+    return plaintext
+
+# Columnar Transposition Cipher
+def columnar_encrypt(text, key):
+    key_order = sorted(list(enumerate(key)), key=lambda x: x[1])
+    num_cols = len(key)
+    num_rows = -(-len(text) // num_cols)  # Ceiling division
+
+    # Fill grid row-wise
+    grid = [[' ' for _ in range(num_cols)] for _ in range(num_rows)]
+    idx = 0
+    for r in range(num_rows):
+        for c in range(num_cols):
+            if idx < len(text):
+                grid[r][c] = text[idx]
+                idx += 1
+
+    # Read column-wise in sorted order
+    ciphertext = ""
+    for c, _ in key_order:
+        for r in range(num_rows):
+            if grid[r][c] != ' ':
+                ciphertext += grid[r][c]
+
+    return ciphertext
+
+def columnar_decrypt(text, key):
+    key_order = sorted(list(enumerate(key)), key=lambda x: x[1])
+    num_cols = len(key)
+    num_rows = -(-len(text) // num_cols)  # Ceiling division
+
+    # Fill grid column-wise
+    grid = [[' ' for _ in range(num_cols)] for _ in range(num_rows)]
+    idx = 0
+    for c, _ in key_order:
+        for r in range(num_rows):
+            if idx < len(text):
+                grid[r][c] = text[idx]
+                idx += 1
+
+    # Read row-wise
+    plaintext = ""
+    for r in range(num_rows):
+        for c in range(num_cols):
+            if grid[r][c] != ' ':
+                plaintext += grid[r][c]
+
+    return plaintext
+
+# Hybrid Encryption
+def hybrid_encrypt(plaintext, playfair_key, transposition_key):
+    playfair_matrix = generate_playfair_matrix(playfair_key)
+    playfair_ciphertext = playfair_encrypt(plaintext, playfair_matrix)
+    final_ciphertext = columnar_encrypt(playfair_ciphertext, transposition_key)
+    return final_ciphertext
+
+def hybrid_decrypt(ciphertext, playfair_key, transposition_key):
+    playfair_matrix = generate_playfair_matrix(playfair_key)
+    intermediate_text = columnar_decrypt(ciphertext, transposition_key)
+    final_plaintext = playfair_decrypt(intermediate_text, playfair_matrix)
+    return final_plaintext
+
+# User Input & Execution
+playfair_key = input("Enter Playfair key: ")
+transposition_key = input("Enter Transposition key: ")
+plaintext = input("Enter Plaintext: ")
+
+# Encrypt
+encrypted_text = hybrid_encrypt(plaintext, playfair_key, transposition_key)
+print("Encrypted Text:", encrypted_text)
+
+# Decrypt
+decrypted_text = hybrid_decrypt(encrypted_text, playfair_key, transposition_key)
+print("Decrypted Text:", decrypted_text)
