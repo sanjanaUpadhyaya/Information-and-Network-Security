@@ -2,7 +2,7 @@ The **Caesar Cipher** is a simple encryption method where each letter in the mes
 
 How to run:
 Running in Google Colab
-1. Click the link below to open the Playfair Cipher in Google Colab:
+1. Click the link below to open the Caeser Cipher in Google Colab:
    https://colab.research.google.com/drive/1lY-b7Ylzd5Zvt-4ZrEZi5kWtUsVA_Hzg
 2. Run the cell by pressing Shift + Enter.
 
