@@ -10,6 +10,10 @@ This project implements a hybrid encryption technique that combines the Playfair
 - Implements Columnar Transposition cipher for permutation-based encryption.
 - Handles key-based encryption and decryption.
 
+How to run:
+The code execution in colab link: https://colab.research.google.com/drive/1WgM6A-Zjb3iPdtOY6HN3kqdar-Z06XE9#scrollTo=psjSKppkoSxo
+
+Alternate method to run:
  Prerequisites
 - Python 3.x
 - NumPy library (for matrix operations)
@@ -25,14 +29,11 @@ This project implements a hybrid encryption technique that combines the Playfair
    pip install numpy
 
    
-
  Usage
 Running the script
 Execute the script in a terminal:
 sh
 python encrypt_decrypt.py
-
-The code execution in colab link: https://colab.research.google.com/drive/1WgM6A-Zjb3iPdtOY6HN3kqdar-Z06XE9#scrollTo=psjSKppkoSxo
 
 
  Inputs
