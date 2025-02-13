@@ -23,13 +23,16 @@ This project implements a hybrid encryption technique that combines the Playfair
 2. Install dependencies:
    sh
    pip install numpy
+
    
 
  Usage
- Running the script
+Running the script
 Execute the script in a terminal:
 sh
 python encrypt_decrypt.py
+
+The code execution in colab link: https://colab.research.google.com/drive/1WgM6A-Zjb3iPdtOY6HN3kqdar-Z06XE9#scrollTo=psjSKppkoSxo
 
 
  Inputs
@@ -55,6 +58,8 @@ Encrypted Text: WXYZ...
 Decrypted Text: HELXLOWORLD
 
 Note: The letter 'X' may be used for padding in Playfair cipher.
+
+
 
 
 
