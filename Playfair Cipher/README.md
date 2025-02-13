@@ -1,59 +1,50 @@
-Playfair Cipher Report
-1. Introduction
-The Playfair Cipher is a manual symmetric encryption technique that encrypts pairs of letters using a 5x5 matrix. It was invented by Charles Wheatstone in 1854, but it was promoted by Lord Playfair, after whom the cipher is named. The Playfair Cipher encrypts a digraph (pair of letters) by applying the following rules:
+Playfair Cipher
 
-If both letters are the same, or only one letter remains, an 'X' is inserted to separate them.
-If the letters appear in the same row or column, they are replaced by the letters immediately to their right or below, respectively.
-If the letters form a rectangle, they are replaced by the letters on the same row but in the other pair of columns.
-2. Objective
-The purpose of this report is to explain the Playfair Cipher encryption and decryption mechanism through a Python implementation. The report will provide step-by-step instructions for running the code, explaining the input, output, and flow of the program.
+Introduction
+The Playfair Cipher is a manual symmetric encryption technique that encrypts pairs of letters using a 5x5 matrix. It was invented by Charles Wheatstone in 1854, but it was promoted by Lord Playfair, after whom the cipher is named. 
 
-Steps to Run the Code:
-1. Open GitHub Codespaces
+Encryption Rules
+1. If both letters in a pair are the same, or only one letter remains, an 'X' is inserted to separate them.
+2. If the letters appear in the same row or column, they are replaced by the letters immediately to their right or below, respectively.
+3. If the letters form a rectangle, they are replaced by the letters on the same row but in the other pair of columns.
 
-2. Navigate to your GitHub repository.
-   Click on the Code button and select Open with Codespaces.
-   Create a New File
+Objective
+This repository contains a Python implementation of the Playfair Cipher, demonstrating both encryption and decryption processes. 
 
-3. Once in the Codespaces editor, create a new Python file named playfair_cipher.py.
-   Paste the Code
+Steps to Run the Code
 
-4. Copy and paste the above Playfair Cipher implementation into the new file.
-   Save the File
+Running in Google Colab
+1. Click the link below to open the Playfair Cipher in Google Colab:
+   https://colab.research.google.com/drive/1C4neOFxH3RJJwOdWvcProfoOSYz_8kkI   
+2. Run the cell by pressing Shift + Enter
 
-5. Press Ctrl+S (Windows) or Cmd+S (Mac) to save the file.
-   Open Terminal
-
-6. In Codespaces, open the terminal by going to View > Terminal.
-   Run the Code
-
-7. In the terminal, type the following command to execute the Python script:
+Running in GitHub Codespaces
+1. Open your GitHub repository.
+2. Click on the Code button and select Open with Codespaces.
+3. In the Codespaces editor, create a new Python file named playfair_cipher.py.
+4. Copy and paste the Playfair Cipher implementation into the file.
+5. Save the file (Ctrl+S on Windows or Cmd+S on Mac).
+6. Open the terminal in Codespaces: View > Terminal.
+7. Run the script using:
+   bash
    python playfair_cipher.py
+   
 
-   OR
-
-
+Running in VS Code
 1. Open VS Code.
 2. Create a new file and save it as playfair_cipher.py.
-3. Copy and paste the Playfair Cipher code into the playfair_cipher.py file.
-4. Save the File: Press Ctrl+S (Windows) or Cmd+S (Mac) to save the file.
-5. Open Integrated Terminal: Go to View > Terminal or press Ctrl+` to open the terminal in VS Code.
-6. Run the Python Script: bash: python playfair_cipher.py
+3. Copy and paste the Playfair Cipher code into the file.
+4. Save the file (Ctrl+S on Windows or Cmd+S on Mac).
+5. Open the integrated terminal: View > Terminal or press Ctrl + \.
+6. Run the script using:
+   bash
+   python playfair_cipher.py
+   
 
-
+Example Usage
 Input:
-
-Enter the key and message when prompted:
 Enter the key: PLAYFAIR
 Enter the message: HELLO
 
 Output:
 Encrypted Message: BIPULB
-
-   
-   Key: PLAYFAIR
-   Message: HELLO
-Steps:
-
-Enter the key: PLAYFAIR
-Enter the message: HELLO
