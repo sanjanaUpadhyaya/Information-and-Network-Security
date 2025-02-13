@@ -27,7 +27,7 @@ The **Monoalphabetic Cipher** is a type of substitution cipher where each letter
      Encrypted string: qtmmp
     
 
-    **Decrypt the String**:
+     **Decrypt the string:**
    - You can then enter the encrypted message to decrypt it:
     
      Enter the length of string to be decrypted: 5
