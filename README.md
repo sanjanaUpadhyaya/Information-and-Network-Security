@@ -53,12 +53,9 @@ pytest
 ## Contributing
 Feel free to contribute by submitting issues or pull requests. Follow the guidelines in `CONTRIBUTING.md`.
 
-## License
-This project is licensed under the MIT License.
 
 ## Contact
-For any queries, reach out to `your-email@example.com` or create an issue in the repository.
+For any queries, reach out to `sanjanasathish04@gmail.com` or create an issue in the repository.
 
----
 Happy Coding! 🚀
 
