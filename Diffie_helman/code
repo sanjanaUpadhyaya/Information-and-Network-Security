@@ -10,4 +10,4 @@ print("Public key of B : ",Yb)
 Ka = math.pow(Yb,Xa)%q
 Kb = math.pow(Ya,Xb)%q
 print("Shared key for A : ",Ka)
-print("Shared key for B : ",Kb)``
+print("Shared key for B : ",Kb)
