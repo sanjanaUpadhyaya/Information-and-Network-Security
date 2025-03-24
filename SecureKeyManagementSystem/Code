@@ -1,0 +1,88 @@
+import os
+import cryptography
+from cryptography.hazmat.primitives.asymmetric import rsa, dh
+from cryptography.hazmat.primitives.serialization import load_pem_private_key, Encoding, PrivateFormat, NoEncryption
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives import serialization
+from base64 import b64encode, b64decode
+
+# 1. Generate Symmetric Key
+def generate_symmetric_key():
+    key = os.urandom(32)  # 256-bit key
+    return key
+
+# 2. Generate Asymmetric Keys
+def generate_asymmetric_keys():
+    private_key = rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=2048
+    )
+    public_key = private_key.public_key()
+    return private_key, public_key
+
+# 3. Secure Key Exchange using Diffie-Hellman
+def diffie_hellman_key_exchange():
+    parameters = dh.generate_parameters(generator=2, key_size=2048)
+    private_key_A = parameters.generate_private_key()
+    private_key_B = parameters.generate_private_key()
+    shared_key_A = private_key_A.exchange(private_key_B.public_key())
+    shared_key_B = private_key_B.exchange(private_key_A.public_key())
+    assert shared_key_A == shared_key_B  # Ensure both parties get the same key
+    return shared_key_A
+
+# 4. Encrypt Message using RSA
+def rsa_encrypt(public_key, message):
+    encrypted = public_key.encrypt(
+        message.encode(),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return b64encode(encrypted)
+
+# 5. Decrypt Message using RSA
+def rsa_decrypt(private_key, encrypted_message):
+    if private_key is None:
+        return "Error: Private Key is revoked and cannot be used."
+    decrypted = private_key.decrypt(
+        b64decode(encrypted_message),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+    return decrypted.decode()
+
+# 6. Key Revocation (Revoke by deleting keys securely)
+def revoke_key():
+    global private_key  # Use global to modify the original key
+    del private_key
+    private_key = None  # Ensure it's set to None after deletion
+    return "Key Revoked"
+
+# Example Usage
+symmetric_key = generate_symmetric_key()
+private_key, public_key = generate_asymmetric_keys()
+diffie_hellman_shared_key = diffie_hellman_key_exchange()
+
+message = input("Enter the message to encrypt: ")
+encrypted_message = rsa_encrypt(public_key, message)
+decrypted_message = rsa_decrypt(private_key, encrypted_message)
+
+print("Original Message:", message)
+print("Encrypted Message:", encrypted_message)
+print("Decrypted Message:", decrypted_message)
+
+# Key Revocation Process
+print("Revoking Private Key...")
+print(revoke_key())
+
+# Attempt to Decrypt after Revocation
+decrypted_message_after_revoke = rsa_decrypt(private_key, encrypted_message)
+print("Decrypted Message after Revocation:", decrypted_message_after_revoke)
