@@ -1,0 +1,130 @@
+import hashlib
+import random
+import time
+
+# Miller-Rabin primality test
+def is_prime(n, k=5):
+    if n <= 3:
+        return n == 2 or n == 3
+    if n % 2 == 0:
+        return False
+    r, s = 0, n - 1
+    while s % 2 == 0:
+        r += 1
+        s //= 2
+    for _ in range(k):
+        a = random.randrange(2, n - 2)
+        x = pow(a, s, n)
+        if x == 1 or x == n - 1:
+            continue
+        for __ in range(r - 1):
+            x = pow(x, 2, n)
+            if x == n - 1:
+                break
+        else:
+            return False
+    return True
+
+# Generate a prime number of n bits
+def generate_large_prime(n_bits):
+    while True:
+        candidate = random.getrandbits(n_bits) | 1
+        if is_prime(candidate):
+            return candidate
+
+# Find generator g
+def find_generator(p, q):
+    for h in range(2, p - 1):
+        g = pow(h, (p - 1) // q, p)
+        if g > 1:
+            return g
+    raise Exception("Generator not found")
+
+# Generate DSA keys
+def generate_keys():
+    print("Generating q (128-bit prime)...")
+    start = time.time()
+    q = generate_large_prime(128)
+    print(f"q generated in {round(time.time() - start, 2)}s")
+
+    print("\nGenerating p (512-bit prime where p-1 divisible by q)...")
+    start = time.time()
+    while True:
+        k = random.getrandbits(384)
+        p_candidate = q * k + 1
+        if p_candidate.bit_length() == 512 and is_prime(p_candidate):
+            p = p_candidate
+            break
+    print(f"p generated in {round(time.time() - start, 2)}s")
+
+    print("\nFinding generator g...")
+    start = time.time()
+    g = find_generator(p, q)
+    print(f"g found in {round(time.time() - start, 2)}s")
+
+    print("\nGenerating private and public key...")
+    x = random.randrange(1, q)
+    y = pow(g, x, p)
+    print("Keys generated.")
+
+    return p, q, g, x, y
+
+# Hash message
+def hash_message(message):
+    return int(hashlib.sha256(message.encode()).hexdigest(), 16)
+
+# Sign
+def sign(message, p, q, g, x):
+    h = hash_message(message)
+    while True:
+        k = random.randrange(1, q)
+        r = pow(g, k, p) % q
+        if r == 0:
+            continue
+        try:
+            k_inv = pow(k, -1, q)
+        except ValueError:
+            continue
+        s = (k_inv * (h + x * r)) % q
+        if s != 0:
+            return r, s
+
+# Verify
+def verify(message, r, s, p, q, g, y):
+    if not (0 < r < q and 0 < s < q):
+        return False
+    h = hash_message(message)
+    try:
+        w = pow(s, -1, q)
+    except ValueError:
+        return False
+    u1 = (h * w) % q
+    u2 = (r * w) % q
+    v = ((pow(g, u1, p) * pow(y, u2, p)) % p) % q
+    return v == r
+
+# =============================
+# MAIN
+# =============================
+print("=== DIGITAL SIGNATURE STANDARD DEMO ===\n")
+p, q, g, x, y = generate_keys()
+
+# Message
+message = "Hi I am sanjana"
+print("\nSigning message:", repr(message))
+msg_hash = hash_message(message)
+print(f"SHA-256 hash: {msg_hash:064x}")
+
+r, s = sign(message, p, q, g, x)
+print(f"Signature:\nr = {r}\ns = {s}")
+
+# Verify correct
+print("\nVerifying original message...")
+is_valid = verify(message, r, s, p, q, g, y)
+print("Signature valid:", is_valid)
+
+# Altered message
+altered = "Hi I am sanjana"
+print("\nVerifying altered message:", repr(altered))
+is_valid_alt = verify(altered, r, s, p, q, g, y)
+print("Signature valid for altered:", is_valid_alt)
