@@ -63,7 +63,7 @@ g found in 0.01s
 Generating private and public key...
 Keys generated.
 
-Signing message: 'Hi I am sanjana'
+Signing message: 'Hi I am sanjana '
 SHA-256 hash: 84ef4a3...f9ad
 
 Signature:
