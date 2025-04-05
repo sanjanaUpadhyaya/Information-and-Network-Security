@@ -1,4 +1,4 @@
-# 🛡️ Digital Signature Algorithm (DSA) Implementation in Python
+#  Digital Signature Algorithm (DSA) Implementation in Python
 
 This project demonstrates a secure and transparent implementation of the **Digital Signature Algorithm (DSA)** in Python without relying on external cryptographic libraries. It involves generating large prime numbers, hashing the message using SHA-256, signing it, and verifying the signature to ensure data integrity, authenticity, and non-repudiation.
 
